@@ -187,8 +187,4 @@ I am also continuing to learn:
 * Modern Web Technologies
 * AI-integrated Applications
 
-## ✨ Portfolio Features
-
-### 🎨 Modern Design
-
-The portfolio uses a dark interface with a cherry-red visual theme, glowing effects, cards, animations, and responsive layouts
+   LIVE DEMO 👽 : https://afshan-tayyab.github.io/Protfolio-006/
