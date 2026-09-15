@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Afshan Tayyab | Computer Science Engineering Student</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.577.0/dist/umd/lucide.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500;600;700;800&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #0d0507;
+      --panel: #1a0a0e;
+      --line: rgba(255, 82, 106, .2);
+      --red: #d90429;
+      --cherry: #ff2e4d;
+      --pink: #ff8fa3;
+      --muted: #c9b0b5;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      width: 100%;
+      font-family: "Libre Franklin", sans-serif;
+      color: #fff0f2;
+      background-color: var(--ink);
+    }
+    .site-shell {
+      width: 100%;
+      min-height: calc(100 * min(var(--vh, 1vh), 1vh));
+      overflow: hidden;
+      position: relative;
+      background-image:
+        linear-gradient(rgba(255,46,77,.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,46,77,.045) 1px, transparent 1px);
+      background-size: 36px 36px;
+    }
+    /* Unique touch: soft cherry glow blobs floating behind content */
+    .cherry-glow {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: .35;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .cherry-glow.one { width: 420px; height: 420px; top: -120px; right: -120px; background: radial-gradient(circle, var(--cherry), transparent 70%); }
+    .cherry-glow.two { width: 360px; height: 360px; bottom: -140px; left: -100px; background: radial-gradient(circle, var(--red), transparent 70%); }
+    header, main, footer { position: relative; z-index: 1; }
+    .nav-surface { background: rgba(13, 5, 7, .85); backdrop-filter: blur(18px); border-bottom: 1px solid var(--line); }
+    .section-wrap { width: 100%; max-width: 1120px; margin: 0 auto; padding: 90px 24px; }
+    .eyebrow { font-family: "Space Mono", monospace; color: var(--pink); letter-spacing: .12em; text-transform: uppercase; font-size: .74rem; }
+    .eyebrow::before { content: "❖ "; color: var(--cherry); }
+    .headline { letter-spacing: -.055em; line-height: 1.03; background: linear-gradient(100deg, #fff 20%, var(--pink) 55%, var(--cherry) 85%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .glass-card { background: rgba(26, 10, 14, .78); border: 1px solid var(--line); box-shadow: 0 18px 60px rgba(0,0,0,.25); }
+    .project-card { transition: transform .25s ease, border-color .25s ease, background .25s ease, box-shadow .25s ease; }
+    .project-card:hover { transform: translateY(-5px); border-color: rgba(255,46,77,.6); background: rgba(38, 12, 17, .95); box-shadow: 0 22px 50px rgba(217,4,41,.25); }
+    .accent-line { width: 56px; height: 2px; background: linear-gradient(90deg, var(--red), var(--cherry)); position: relative; }
+    .accent-line::after { content: ""; position: absolute; right: -10px; top: 50%; transform: translateY(-50%); width: 6px; height: 6px; border-radius: 50%; background: var(--cherry); box-shadow: 0 0 8px var(--cherry); }
+    .tag { border: 1px solid rgba(255,46,77,.22); background: rgba(217,4,41,.1); }
+
+    /* Unique button system: shine-sweep primary + fill-in outline */
+    .btn {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      gap: .55rem;
+      transition: transform .25s cubic-bezier(.34,1.56,.64,1), box-shadow .25s ease, border-color .25s ease;
+    }
+    .btn-arrow { transition: transform .3s cubic-bezier(.34,1.56,.64,1); display: inline-block; }
+    .btn:hover .btn-arrow { transform: translateX(5px); }
+    .btn:active { transform: translateY(0) scale(.96) !important; }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--red), var(--cherry));
+      color: #fff;
+      box-shadow: 0 10px 26px -6px rgba(217,4,41,.55);
+    }
+    .btn-primary::before {
+      content: "";
+      position: absolute; inset: 0;
+      background: linear-gradient(115deg, transparent 35%, rgba(255,255,255,.45) 50%, transparent 65%);
+      transform: translateX(-130%);
+      transition: transform .65s ease;
+      z-index: -1;
+    }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 16px 34px -6px rgba(217,4,41,.7); }
+    .btn-primary:hover::before { transform: translateX(130%); }
+
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid rgba(255,143,163,.55);
+      color: #ffe1e6;
+      z-index: 1;
+    }
+    .btn-outline::before {
+      content: "";
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, var(--red), var(--cherry));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .4s cubic-bezier(.65,0,.35,1);
+      z-index: -1;
+    }
+    .btn-outline:hover { border-color: transparent; color: #fff; transform: translateY(-3px); box-shadow: 0 14px 30px -8px rgba(217,4,41,.5); }
+    .btn-outline:hover::before { transform: scaleX(1); }
+
+    .btn-pill {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      padding: .55rem 1.1rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255,46,77,.35);
+      background: rgba(217,4,41,.08);
+      color: var(--pink);
+      font-weight: 600;
+      font-size: .875rem;
+      overflow: hidden;
+      isolation: isolate;
+      transition: color .3s ease, border-color .3s ease, transform .25s ease;
+    }
+    .btn-pill::before {
+      content: "";
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, var(--red), var(--cherry));
+      transform: translateX(-102%);
+      transition: transform .35s cubic-bezier(.65,0,.35,1);
+      z-index: -1;
+    }
+    .btn-pill:hover { color: #fff; border-color: transparent; transform: translateX(2px); }
+    .btn-pill:hover::before { transform: translateX(0); }
+    .btn-pill .btn-arrow { transition: transform .3s cubic-bezier(.34,1.56,.64,1); }
+    .btn-pill:hover .btn-arrow { transform: translateX(4px); }
+    .focus-ring:focus-visible, a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
+      outline: 3px solid var(--cherry); outline-offset: 3px;
+    }
+    .reveal { animation: rise .7s both; }
+    .delay-1 { animation-delay: .1s; } .delay-2 { animation-delay: .2s; } .delay-3 { animation-delay: .3s; }
+    @keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+    @media (max-width: 767px) { .section-wrap { padding: 68px 20px; } }
+  </style>
+ </head>
+ <body data-template-id="__page-root">
+  <div class="site-shell">
+   <div class="cherry-glow one" aria-hidden="true"></div>
+   <div class="cherry-glow two" aria-hidden="true"></div>
+   <header class="nav-surface sticky top-0 z-50 w-full">
+    <nav class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4" aria-label="Main navigation">
+      <a href="#home" data-template-id="nav-brand" class="canva-link font-bold tracking-tight text-white">Afshan Tayyab</a>
+      <button id="menu-toggle" type="button" class="focus-ring rounded-md p-2 text-rose-200 md:hidden" aria-label="Open navigation menu" aria-expanded="false">
+        <i data-lucide="menu" width="22" height="22"></i>
+      </button>
+      <div id="nav-links" class="hidden absolute left-0 right-0 top-full border-b border-rose-200/10 bg-[#0d0507] px-6 py-5 md:static md:flex md:border-0 md:bg-transparent md:p-0">
+        <div class="flex flex-col gap-4 text-sm text-slate-300 md:flex-row md:items-center md:gap-6">
+          <a data-template-id="nav-about" class="canva-link hover:text-rose-300" href="#about">About</a>
+          <a data-template-id="nav-skills" class="canva-link hover:text-rose-300" href="#skills">Skills</a>
+          <a data-template-id="nav-projects" class="canva-link hover:text-rose-300" href="#projects">Projects</a>
+          <a data-template-id="nav-contact" class="canva-link hover:text-rose-300" href="#contact">Contact</a>
+        </div>
+      </div>
+    </nav>
+   </header>
+   <main>
+    <section id="home" class="section-wrap grid items-center gap-12 lg:grid-cols-[1.35fr_.65fr]">
+      <div>
+        <p data-template-id="hero-kicker" class="canva-text eyebrow reveal">Computer Science Engineering Student</p>
+        <h1 data-template-id="hero-name" class="canva-text headline reveal delay-1 mt-5 max-w-4xl text-5xl font-extrabold sm:text-7xl">Afshan Tayyab</h1>
+        <p data-template-id="hero-title" class="canva-text reveal delay-2 mt-6 max-w-3xl text-xl leading-relaxed text-slate-200 sm:text-2xl">Building practical, user-focused web applications and backend systems.</p>
+        <p data-template-id="hero-focus" class="canva-text reveal delay-2 mt-6 max-w-3xl leading-7 text-slate-400">Focused on Python, Django, REST APIs, and AI-integrated applications. Currently pursuing B.Tech in Computer Science at Shadan Women's College of Engineering &amp; Technology (JNTUH).</p>
+        <div class="reveal delay-3 mt-8 flex flex-wrap gap-3">
+          <a data-template-id="hero-projects-button" class="canva-button btn btn-primary focus-ring rounded-full px-6 py-3 font-semibold" href="#projects">View Projects <span class="btn-arrow">→</span></a>
+          <button data-template-id="hero-resume-button" class="canva-button btn btn-outline focus-ring rounded-full px-6 py-3 font-semibold" type="button" data-download-resume><i data-lucide="download" width="16" height="16"></i> Resume</button>
+          <a data-template-id="hero-github-button" class="canva-button btn btn-outline focus-ring rounded-full px-6 py-3 font-semibold" href="https://github.com/Afshan-Tayyab" target="_blank" rel="noopener noreferrer"><i data-lucide="github" width="16" height="16"></i> GitHub</a>
+          <a data-template-id="hero-linkedin-button" class="canva-button btn btn-outline focus-ring rounded-full px-6 py-3 font-semibold" href="https://www.linkedin.com/in/afshan-tayyab-902923327" target="_blank" rel="noopener noreferrer"><i data-lucide="linkedin" width="16" height="16"></i> LinkedIn</a>
+        </div>
+      </div>
+      <aside data-template-id="hero-status-card" class="canva-panel glass-card reveal delay-2 rounded-2xl p-7">
+        <p data-template-id="status-label" class="canva-text eyebrow">Status</p>
+        <div class="my-5 accent-line"></div>
+        <p data-template-id="status-copy" class="canva-text text-lg font-semibold leading-relaxed text-slate-100">Open to internships and entry-level software development roles.</p>
+        <div class="mt-7 border-t border-rose-100/10 pt-5">
+          <p data-template-id="status-location" class="canva-text text-sm text-slate-400">Hyderabad, Telangana, India</p>
+        </div>
+      </aside>
+    </section>
+    <section id="about">
+      <div class="section-wrap border-t border-rose-100/10">
+        <p data-template-id="about-kicker" class="canva-text eyebrow">About</p>
+        <h2 data-template-id="about-heading" class="canva-text mt-3 font-bold text-3xl text-white">A bit about me</h2>
+        <div class="mt-8 grid gap-7 md:grid-cols-[1.2fr_.8fr]">
+          <p data-template-id="about-copy" class="canva-text max-w-2xl text-lg leading-8 text-slate-300">I'm a Computer Science Engineering student with a strong foundation in Python, Django, and modern web technologies. I enjoy building full-stack applications that solve real problems — from hospital management systems to attendance trackers. I'm particularly interested in backend development, REST APIs, and integrating AI into practical tools.</p>
+          <div data-template-id="about-facts-card" class="canva-card glass-card rounded-xl p-6">
+            <p data-template-id="about-college" class="canva-text font-semibold text-white">Shadan Women's College of Engineering &amp; Technology</p>
+            <p data-template-id="about-university" class="canva-text mt-2 text-slate-400">Jawaharlal Nehru Technological University Hyderabad (JNTUH)</p>
+            <p data-template-id="about-cgpa" class="canva-text mt-5 font-semibold text-rose-300">CGPA: 8.5 / 10</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="skills">
+      <div class="section-wrap border-t border-rose-100/10">
+        <p data-template-id="skills-kicker" class="canva-text eyebrow">Skills</p>
+        <h2 data-template-id="skills-heading" class="canva-text mt-3 font-bold text-3xl text-white">Technical toolkit</h2>
+        <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <article data-template-id="skills-development-card" class="canva-card glass-card rounded-xl p-6">
+            <h3 data-template-id="skills-development-heading" class="canva-text font-bold text-white">Frontend Development</h3>
+            <p data-template-id="skills-development-copy" class="canva-text mt-3 leading-7 text-slate-400">HTML5, CSS3, JavaScript, Bootstrap, responsive design, and modern UI layouts.</p>
+          </article>
+          <article data-template-id="skills-backend-card" class="canva-card glass-card rounded-xl p-6">
+            <h3 data-template-id="skills-backend-heading" class="canva-text font-bold text-white">Backend &amp; APIs</h3>
+            <p data-template-id="skills-backend-copy" class="canva-text mt-3 leading-7 text-slate-400">Python, Django, FastAPI, REST API design, CRUD operations, authentication, and MVC architecture.</p>
+          </article>
+          <article data-template-id="skills-data-card" class="canva-card glass-card rounded-xl p-6">
+            <h3 data-template-id="skills-data-heading" class="canva-text font-bold text-white">Databases &amp; Data</h3>
+            <p data-template-id="skills-data-copy" class="canva-text mt-3 leading-7 text-slate-400">PostgreSQL, SQLite, Supabase, data modeling, and query optimization.</p>
+          </article>
+          <article data-template-id="skills-tools-card" class="canva-card glass-card rounded-xl p-6">
+            <h3 data-template-id="skills-tools-heading" class="canva-text font-bold text-white">Tools &amp; Workflow</h3>
+            <p data-template-id="skills-tools-copy" class="canva-text mt-3 leading-7 text-slate-400">Git, GitHub, VS Code, Postman, Streamlit, and agile collaboration.</p>
+          </article>
+          <article data-template-id="skills-concepts-card" class="canva-card glass-card rounded-xl p-6">
+            <h3 data-template-id="skills-concepts-heading" class="canva-text font-bold text-white">Core Concepts</h3>
+            <p data-template-id="skills-concepts-copy" class="canva-text mt-3 leading-7 text-slate-400">OOP, MVC, CRUD, authentication, API integration, and AI-assisted application development.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+    <section id="projects">
+      <div class="section-wrap border-t border-rose-100/10">
+        <p data-template-id="projects-kicker" class="canva-text eyebrow">Projects</p>
+        <h2 data-template-id="projects-heading" class="canva-text mt-3 font-bold text-3xl text-white">Selected work</h2>
+        <p data-template-id="projects-note" class="canva-text mt-4 max-w-3xl leading-7 text-slate-400">A mix of full-stack applications and small utilities built to practice backend logic, database design, and clean UI.</p>
+        <div class="mt-8 grid gap-6 lg:grid-cols-2">
+          <article data-template-id="healthzone-card" class="canva-card project-card glass-card rounded-xl p-7">
+            <p data-template-id="healthzone-type" class="canva-text eyebrow">Full-Stack Web App</p>
+            <h3 data-template-id="healthzone-name" class="canva-text mt-3 font-bold text-white text-2xl">HealthZone — Hospital Management System</h3>
+            <p data-template-id="healthzone-description" class="canva-text mt-4 leading-7 text-slate-400">A Django-based system to manage patients, doctors, appointments, and medical records with role-based access.</p>
+            <p data-template-id="healthzone-tech" class="canva-text mt-5 text-sm text-rose-200">Python · Django · PostgreSQL · Bootstrap · REST APIs</p>
+            <p data-template-id="healthzone-features" class="canva-text mt-3 text-sm leading-6 text-slate-400">Features: patient registration, appointment scheduling, doctor dashboard, authentication, CRUD for records.</p>
+            <a data-template-id="healthzone-github" class="canva-link btn-pill mt-6" href="https://github.com/Afshan-Tayyab" target="_blank" rel="noopener noreferrer">View on GitHub <span class="btn-arrow">→</span></a>
+          </article>
+          <article data-template-id="attendance-card" class="canva-card project-card glass-card rounded-xl p-7">
+            <p data-template-id="attendance-type" class="canva-text eyebrow">Web Application</p>
+            <h3 data-template-id="attendance-name" class="canva-text mt-3 font-bold text-white text-2xl">Employee Attendance Management Tracker</h3>
+            <p data-template-id="attendance-description" class="canva-text mt-4 leading-7 text-slate-400">A tool to track employee attendance, generate reports, and manage leave requests with an admin panel.</p>
+            <p data-template-id="attendance-tech" class="canva-text mt-5 text-sm text-rose-200">Python · Django · SQLite · JavaScript · Chart.js</p>
+            <p data-template-id="attendance-features" class="canva-text mt-3 text-sm leading-6 text-slate-400">Features: clock in/out, attendance summary, monthly reports, role-based access, CSV export.</p>
+            <a data-template-id="attendance-github" class="canva-link btn-pill mt-6" href="https://github.com/Afshan-Tayyab" target="_blank" rel="noopener noreferrer">View on GitHub <span class="btn-arrow">→</span></a>
+          </article>
+        </div>
+        <h3 data-template-id="other-projects-heading" class="canva-text mt-14 font-bold text-white text-2xl">More projects</h3>
+        <div class="mt-6 grid gap-5 md:grid-cols-3">
+          <article data-template-id="student-project-card" class="canva-card project-card glass-card rounded-xl p-6">
+            <h4 data-template-id="student-project-name" class="canva-text font-bold text-white">Student Performance Tracker</h4>
+            <p data-template-id="student-project-description" class="canva-text mt-3 leading-7 text-slate-400">A Python + Streamlit app to record marks, calculate averages, and visualize student performance trends.</p>
+            <a data-template-id="student-project-github" class="canva-link btn-pill mt-5 text-xs" href="https://github.com/Afshan-Tayyab" target="_blank" rel="noopener noreferrer">GitHub <span class="btn-arrow">→</span></a>
+          </article>
+          <article data-template-id="sameword-project-card" class="canva-card project-card glass-card rounded-xl p-6">
+            <h4 data-template-id="sameword-project-name" class="canva-text font-bold text-white">Same-Word Explorer</h4>
+            <p data-template-id="sameword-project-description" class="canva-text mt-3 leading-7 text-slate-400">A small NLP utility that finds and groups identical words across text files, built with Python and regex.</p>
+            <a data-template-id="sameword-project-github" class="canva-link btn-pill mt-5 text-xs" href="https://github.com/Afshan-Tayyab" target="_blank" rel="noopener noreferrer">GitHub <span class="btn-arrow">→</span></a>
+          </article>
+          <article data-template-id="api-project-card" class="canva-card project-card glass-card rounded-xl p-6">
+            <h4 data-template-id="api-project-name" class="canva-text font-bold text-white">First API / Streamlit REST Demo</h4>
+            <p data-template-id="api-project-description" class="canva-text mt-3 leading-7 text-slate-400">A beginner-friendly REST API with FastAPI and a Streamlit frontend for testing endpoints interactively.</p>
+            <a data-template-id="api-project-github" class="canva-link btn-pill mt-5 text-xs" href="https://github.com/Afshan-Tayyab" target="_blank" rel="noopener noreferrer">GitHub <span class="btn-arrow">→</span></a>
+          </article>
+        </div>
+      </div>
+    </section>
+    <section id="education">
+      <div class="section-wrap border-t border-rose-100/10 grid gap-8 md:grid-cols-3">
+        <div>
+          <p data-template-id="education-kicker" class="canva-text eyebrow">Education</p>
+          <h2 data-template-id="education-heading" class="canva-text mt-3 font-bold text-3xl text-white">Academic background</h2>
+        </div>
+        <article data-template-id="education-card" class="canva-card glass-card rounded-xl p-6 md:col-span-2">
+          <h3 data-template-id="education-degree" class="canva-text font-bold text-white">B.Tech in Computer Science Engineering</h3>
+          <p data-template-id="education-college" class="canva-text mt-3 text-slate-300">Shadan Women's College of Engineering &amp; Technology</p>
+          <p data-template-id="education-university" class="canva-text mt-2 text-slate-400">Jawaharlal Nehru Technological University Hyderabad (JNTUH)</p>
+          <p data-template-id="education-cgpa" class="canva-text mt-5 font-semibold text-rose-300">CGPA: 8.5 / 10</p>
+        </article>
+      </div>
+    </section>
+    <section id="certifications">
+      <div class="section-wrap border-t border-rose-100/10 grid gap-8 md:grid-cols-2">
+        <div>
+          <p data-template-id="certifications-kicker" class="canva-text eyebrow">Certifications</p>
+          <h2 data-template-id="certifications-heading" class="canva-text mt-3 font-bold text-3xl text-white">Learning &amp; credentials</h2>
+        </div>
+        <article data-template-id="certifications-card" class="canva-card glass-card rounded-xl p-6">
+          <p data-template-id="certifications-copy" class="canva-text leading-7 text-slate-400">Completed online courses in Python, Django, REST APIs, and web development. Actively pursuing additional certifications in backend engineering and cloud fundamentals.</p>
+        </article>
+      </div>
+    </section>
+    <section id="involvement">
+      <div class="section-wrap border-t border-rose-100/10 grid gap-8 md:grid-cols-2">
+        <div>
+          <p data-template-id="involvement-kicker" class="canva-text eyebrow">Involvement</p>
+          <h2 data-template-id="involvement-heading" class="canva-text mt-3 font-bold text-3xl text-white">Beyond the classroom</h2>
+        </div>
+        <article data-template-id="involvement-card" class="canva-card glass-card rounded-xl p-6">
+          <p data-template-id="involvement-copy" class="canva-text leading-7 text-slate-400">Participated in college tech events, coding challenges, and workshops. Interested in open-source contributions and building tools that help students and small teams.</p>
+        </article>
+      </div>
+    </section>
+    <section id="resume">
+      <div class="section-wrap border-t border-rose-100/10">
+        <article data-template-id="resume-card" class="canva-banner rounded-2xl p-8 sm:p-10 bg-gradient-to-br from-[#2a0812] to-[#1a0a0e] border border-rose-100/10">
+          <p data-template-id="resume-kicker" class="canva-text eyebrow">Resume</p>
+          <h2 data-template-id="resume-heading" class="canva-text mt-3 max-w-2xl font-bold text-white text-2xl">Want the full picture?</h2>
+          <p data-template-id="resume-copy" class="canva-text mt-4 max-w-2xl leading-7 text-slate-200">Download a plain-text version of my resume with skills, projects, and contact details.</p>
+          <button data-template-id="resume-download-button" class="canva-button btn btn-primary focus-ring mt-7 rounded-full px-6 py-3 font-semibold" type="button" data-download-resume><i data-lucide="file-down" width="16" height="16"></i> Download Resume (.txt)</button>
+        </article>
+      </div>
+    </section>
+    <section id="contact">
+      <div class="section-wrap border-t border-rose-100/10 grid gap-10 lg:grid-cols-[.8fr_1.2fr]">
+        <div>
+          <p data-template-id="contact-kicker" class="canva-text eyebrow">Contact</p>
+          <h2 data-template-id="contact-heading" class="canva-text mt-3 font-bold text-3xl text-white">Let's connect</h2>
+          <p data-template-id="contact-copy" class="canva-text mt-5 leading-8 text-slate-400">I'm open to internship opportunities, freelance projects, and collaboration. Drop a message and I'll get back to you.</p>
+          <a data-template-id="contact-email-link" class="canva-link mt-6 inline-block font-semibold text-rose-300 hover:text-white" href="mailto:tayyaba044705@gmail.com">tayyaba044705@gmail.com</a>
+        </div>
+        <form id="contact-form" class="glass-card rounded-xl p-6 sm:p-8">
+          <div class="grid gap-5 sm:grid-cols-2">
+            <div>
+              <label data-template-id="contact-name-label" class="canva-text mb-2 block text-sm font-semibold text-slate-200" for="contact-name">Name</label>
+              <input id="contact-name" class="focus-ring w-full rounded-md border border-rose-100/15 bg-[#180a0d] px-4 py-3 text-white" name="name" required>
+            </div>
+            <div>
+              <label data-template-id="contact-email-label" class="canva-text mb-2 block text-sm font-semibold text-slate-200" for="contact-email">Email</label>
+              <input id="contact-email" class="focus-ring w-full rounded-md border border-rose-100/15 bg-[#180a0d] px-4 py-3 text-white" type="email" name="email" required>
+            </div>
+          </div>
+          <div class="mt-5">
+            <label data-template-id="contact-subject-label" class="canva-text mb-2 block text-sm font-semibold text-slate-200" for="contact-subject">Subject</label>
+            <input id="contact-subject" class="focus-ring w-full rounded-md border border-rose-100/15 bg-[#180a0d] px-4 py-3 text-white" name="subject" required>
+          </div>
+          <div class="mt-5">
+            <label data-template-id="contact-message-label" class="canva-text mb-2 block text-sm font-semibold text-slate-200" for="contact-message">Message</label>
+            <textarea id="contact-message" class="focus-ring w-full resize-y rounded-md border border-rose-100/15 bg-[#180a0d] px-4 py-3 text-white" name="message" rows="5" required></textarea>
+          </div>
+          <button id="contact-submit" data-template-id="contact-submit-button" class="canva-button btn btn-primary focus-ring mt-6 rounded-full px-6 py-3 font-semibold" type="submit">Send Message <span class="btn-arrow">→</span></button>
+          <p id="form-submitting" data-template-id="contact-submitting-message" class="canva-text mt-4 hidden text-sm text-rose-300">Sending...</p>
+          <p id="form-success" data-template-id="contact-success-message" class="canva-text mt-4 hidden text-sm text-emerald-300" role="status">Message sent successfully!</p>
+          <p id="form-error" data-template-id="contact-error-message" class="canva-text mt-4 hidden text-sm text-orange-300" role="alert">Something went wrong. Please try again.</p>
+        </form>
+      </div>
+    </section>
+   </main>
+   <footer data-template-id="footer-section" class="canva-footer border-t border-rose-100/10">
+    <div class="mx-auto flex max-w-7xl flex-col gap-3 px-6 py-8 text-sm text-slate-400 sm:flex-row sm:items-center sm:justify-between">
+      <p data-template-id="footer-copy" class="canva-text">© 2025 Afshan Tayyab. All rights reserved.</p>
+      <div class="flex gap-5">
+        <a data-template-id="footer-github" class="canva-link hover:text-rose-300" href="https://github.com/Afshan-Tayyab" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a data-template-id="footer-linkedin" class="canva-link hover:text-rose-300" href="https://www.linkedin.com/in/afshan-tayyab-902923327" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      </div>
+    </div>
+   </footer>
+  </div>
+  <script>
+    const menuToggle = document.getElementById("menu-toggle");
+    const navLinks = document.getElementById("nav-links");
+    menuToggle.addEventListener("click", () => {
+      const opened = !navLinks.classList.contains("hidden");
+      navLinks.classList.toggle("hidden", opened);
+      menuToggle.setAttribute("aria-expanded", String(!opened));
+    });
+    navLinks.querySelectorAll("a").forEach(link => link.addEventListener("click", () => {
+      if (window.innerWidth < 768) { navLinks.classList.add("hidden"); menuToggle.setAttribute("aria-expanded", "false"); }
+    }));
+
+    function downloadResume() {
+      const resume = `Afshan Tayyab\nComputer Science Engineering Student\n\nCollege: Shadan Women's College of Engineering & Technology\nUniversity: JNTUH\nLocation: Hyderabad, Telangana, India\nCGPA: 8.5/10\n\nFocus: Python • Django • Backend Development • REST APIs • Web Development • AI-integrated applications\n\nSkills: Python, JavaScript, HTML5, CSS3, Bootstrap, Django, FastAPI, REST APIs, Streamlit, PostgreSQL, SQLite, Supabase, Git, GitHub, VS Code, Postman, OOP, MVC, CRUD, Authentication.\n\nProjects: HealthZone Hospital Management System; Employee Attendance Management Tracker; Student Performance Tracker; Same-Word Explorer; First API / Streamlit REST Demo\n\nGitHub: https://github.com/Afshan-Tayyab\nLinkedIn: https://www.linkedin.com/in/afshan-tayyab-902923327\nEmail: tayyaba044705@gmail.com`;
+      const blob = new Blob([resume], { type: "text/plain" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url; link.download = "Afshan-Tayyab-Resume.txt";
+      document.body.appendChild(link); link.click(); link.remove();
+      URL.revokeObjectURL(url);
+    }
+    document.querySelectorAll("[data-download-resume]").forEach(button => button.addEventListener("click", downloadResume));
+
+    const form = document.getElementById("contact-form");
+    const submitButton = document.getElementById("contact-submit");
+    const submitting = document.getElementById("form-submitting");
+    const success = document.getElementById("form-success");
+    const error = document.getElementById("form-error");
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      success.classList.add("hidden"); error.classList.add("hidden");
+      submitButton.disabled = true;
+      submitButton.classList.add("opacity-60", "cursor-not-allowed");
+      submitting.classList.remove("hidden");
+
+      await new Promise(resolve => setTimeout(resolve, 800));
+
+      submitting.classList.add("hidden");
+      submitButton.disabled = false;
+      submitButton.classList.remove("opacity-60", "cursor-not-allowed");
+
+      form.reset();
+      success.classList.remove("hidden");
+    });
+
+    lucide.createIcons();
+  </script>
+ </body>
+</html>
